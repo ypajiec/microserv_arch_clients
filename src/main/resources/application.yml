@@ -1,0 +1,129 @@
+server:
+  port: 8081
+
+
+#keycloak-client:
+#  server-url: "http://oauth-ppa.region.cbr.ru:8180"
+#  realm: ppa
+#  client-id: ppa-app
+#  public-client: true
+
+ppa:
+#  security:
+#    access-token-url: "${keycloak-client.server-url}/auth/realms/ppa/protocol/openid-connect/token"
+#    client-id: ${keycloak-client.client-id}
+#    clientPassword:
+
+spring:
+  main.allow-bean-definition-overriding: true
+  jackson.serialization.FAIL_ON_EMPTY_BEANS: false
+#  kafka:
+#    bootstrap-servers: ${KAFKA_URI:http://localhost:9092}
+#    consumer:
+#      group-id: asset-service
+#      auto-offset-reset: earliest
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          messaging-client-password:
+#            provider: keycloak
+#            client-id: ${keycloak-client.client-id}
+#            client-secret:
+#            authorization-grant-type: password
+#            scope: openid,profile,email
+#        provider:
+#          keycloak:
+#            authorization-uri: ${keycloak-client.server-url}/auth/realms/ppa/protocol/openid-connect/auth
+#            token-uri: ${keycloak-client.server-url}/auth/realms/ppa/protocol/openid-connect/token
+#      resourceserver:
+#        jwt:
+#          issuer-uri: ${keycloak-client.server-url}/auth/realms/ppa
+#          jwk-set-uri: ${keycloak-client.server-url}/auth/realms/ppa/protocol/openid-connect/certs
+  data:
+    rest:
+      detection-strategy: annotated
+      basePath: /api
+  h2.console.enabled: true
+  datasource:
+    url: jdbc:h2:mem:micro_serv_arch
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    initialization-mode: always
+    continue-on-error: false
+    hikari:
+      minimum-idle: 5
+      connection-test-query: SELECT 1 FROM DUAL
+      maximum-pool-size: 20
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: AssetHikariCP
+      max-lifetime: 60000
+      connection-timeout: 30000
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    open-in-view: true
+logging:
+  level:
+    ru.cbr.ppa: debug
+    org.hibernate.SQL: info
+    org.hibernate.type: off
+    org.springframework: ERROR
+    org.springframework.data: ERROR
+    com.fasterxml.jackson: ERROR
+    org.springframework.web: INFO
+    org.springframework.web.HttpLogging: ERROR
+    org.springframework.security: ERROR
+    org.springframework.security.oauth2: ERROR
+    org.springframework.batch: ERROR
+    org.springframework.transaction.interceptor: ERROR
+#    org.camunda.bpm.client: DEBUG # increase the log level of the application
+#---
+#ppa:
+#  asset:
+#    data.generation.enabled: false
+#spring:
+#  config:
+#    activate:
+#      on-profile: test,context-load-test,repository-test,rest-api-test,data-rest-validation-test
+#    name: test
+#  jpa:
+#    show-sql: true
+#  kafka:
+#    bootstrap-servers: ${KAFKA_URI:http://localhost:10092}
+#    consumer:
+#      group-id: asset-service
+#      auto-offset-reset: earliest
+#logging:
+#  level:
+#    ru.cbr.ppa: debug
+#    org.hibernate.SQL: info
+#    org.hibernate.type: off
+#server:
+#  port: 8081
+#  forward-headers-strategy: native
+#---
+#spring:
+#  config:
+#    activate:
+#      on-profile: dev
+#    name: dev
+#server:
+#  port: 8081
+#  forward-headers-strategy: native
+#---
+#spring:
+#  config:
+#    activate:
+#      on-profile: prod
+#    name: prod
+#server:
+#  port: 8080
+#  forward-headers-strategy: native
